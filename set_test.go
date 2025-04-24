@@ -16,7 +16,6 @@ type Point struct {
 	X, Y int
 }
 
-// Custom type for testing
 type CustomID int
 
 func TestSetWithStructsAndCustomTypes(t *testing.T) {

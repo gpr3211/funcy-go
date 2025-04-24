@@ -131,7 +131,6 @@ func TestFutureTransformations(t *testing.T) {
 		assertEqual(t, expectedErr, err)
 	})
 }
-
 func TestFutureSequence(t *testing.T) {
 	t.Run("sequence of successful futures", func(t *testing.T) {
 		futures := []*Future[int]{
@@ -209,7 +208,7 @@ func TestComplexChaining(t *testing.T) {
 
 		result, err := lenFuture.Get()
 		assertEqual(t, nil, err)
-		assertEqual(t, 16, result) // "Number: 5" has length 8, doubled to 16
+		assertEqual(t, 18, result) // "Number: 5" has length 8, doubled to 16
 	})
 
 	t.Run("error propagation in chain", func(t *testing.T) {

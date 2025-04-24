@@ -3,14 +3,14 @@ package monad
 import "strconv"
 
 // Safe map access
-func getFromMap[K comparable, V any](m map[K]V, key K) Maybe[V] {
+func GetFromMap[K comparable, V any](m map[K]V, key K) Maybe[V] {
 	if value, ok := m[key]; ok {
 		return Just(value)
 	}
 	return Nothing[V]()
 }
 
-func parseNumber(s string) Maybe[int] {
+func ParseNumber(s string) Maybe[int] {
 	if num, err := strconv.Atoi(s); err == nil {
 		return Just(num)
 	}
@@ -18,7 +18,7 @@ func parseNumber(s string) Maybe[int] {
 }
 
 // Example using fromNullable
-func fromNullable[A any](ptr *A) Maybe[A] {
+func FromNullable[A any](ptr *A) Maybe[A] {
 	if ptr == nil {
 		return Nothing[A]()
 	}
