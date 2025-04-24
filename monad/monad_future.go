@@ -7,26 +7,26 @@ import (
 )
 
 type Future[A any] struct {
-	value    A             // The computed value of the Future
-	err      error         // The error from the computation, if any
-	done     bool          // Indicates if the computation is completed
-	mutex    sync.RWMutex  // Mutex to protect access to `value` and `err`
-	waitChan chan struct{} // Channel to signal when the computation is complete
+	value    A             // computed value of the Future.
+	err      error         // The error from the computation, if any.
+	done     bool          // Indicates if the computation is completed.
+	mutex    sync.RWMutex  // Mutex to protect access to `value` and `err`.
+	waitChan chan struct{} // Channel to signal when the computation is complete.
 }
 
 // Creates a new Future from a computation
 func NewFuture[A any](compute func() (A, error)) *Future[A] {
 	f := &Future[A]{
-		waitChan: make(chan struct{}), // Channel will close when computation is done
+		waitChan: make(chan struct{}), // close when done
 	}
 	go func() {
-		value, err := compute() // Run the computation
-		f.mutex.Lock()          // Lock for setting the value and error
+		value, err := compute()
+		f.mutex.Lock()
 		f.value = value
 		f.err = err
 		f.done = true
-		f.mutex.Unlock()  // Unlock after setting values
-		close(f.waitChan) // Signal completion
+		f.mutex.Unlock()
+		close(f.waitChan) // Signal done
 	}()
 
 	return f

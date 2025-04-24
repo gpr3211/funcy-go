@@ -3,10 +3,8 @@ package monad
 import (
 	"errors"
 	"fmt"
-	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 	"time"
 )
@@ -269,7 +267,6 @@ func TestEdgeCases(t *testing.T) {
 }
 
 func TestHttpFutureWithTimeout(t *testing.T) {
-	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stdout, nil)))
 
 	tests := []struct {
 		name         string
