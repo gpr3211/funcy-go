@@ -63,11 +63,15 @@ fmt.Println(result, err) // Output: 42 <nil>
 #### `Get` and `GetWithTimeout`
 ```go
 func (f *Future[A]) Get() (A, error)
-func (f *Future[A]) GetWithTimeout(timeout time.Duration) (A, error)
+func (f *Future[A]) GetWithTimeout(timeout time.Duration) (A, error,bool)
+// returns A,nil,false if Success
+// returns A,err,false if error in computation
+// returns A,err,true if timout
+// 
 ```
 ```go
-result, err := future.GetWithTimeout(2 * time.Second)
-fmt.Println(result, err)
+result, err,timeOut := future.GetWithTimeout(2 * time.Second)
+fmt.Println(result, err,timeOut)
 ```
 
 #### `Map`

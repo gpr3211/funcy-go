@@ -1,7 +1,6 @@
 package monad
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -82,14 +81,15 @@ func (f *Future[A]) Get() (A, error) {
 // result, err := future.Get()
 
 // GetWithTimeout waits for the Future to complete or times out after `timeout`.
-func (f *Future[A]) GetWithTimeout(timeout time.Duration) (A, error) {
+// computational error returned by error return, bool returns true if timeout is exceeded.
+func (f *Future[A]) GetWithTimeout(timeout time.Duration) (A, error, bool) {
 	select {
 	case <-f.waitChan: // Future completed
 		f.mutex.RLock()
 		defer f.mutex.RUnlock()
-		return f.value, f.err
+		return f.value, f.err, false
 	case <-time.After(timeout): // Timeout reached
-		return *new(A), fmt.Errorf("timeout waiting for future")
+		return *new(A), nil, true
 	}
 }
 
