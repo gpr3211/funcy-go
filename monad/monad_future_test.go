@@ -49,6 +49,29 @@ func TestHttpFutureWithTimeout(t *testing.T) {
 			expectTimeout: false,
 		},
 		{
+			name: "negative timeout input value",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte("hello"))
+			},
+			timeout:       -2 * time.Second,
+			expectError:   false,
+			expectStatus:  http.StatusOK,
+			expectTimeout: true,
+		},
+		{
+			name: "timeout input value is 0",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte("hello"))
+			},
+			timeout:       0 * time.Second,
+			expectError:   false,
+			expectStatus:  http.StatusOK,
+			expectTimeout: true,
+		},
+
+		{
 			name: "slow response triggers timeout",
 			handler: func(w http.ResponseWriter, r *http.Request) {
 				time.Sleep(3 * time.Second)
@@ -60,7 +83,7 @@ func TestHttpFutureWithTimeout(t *testing.T) {
 			expectTimeout: true,
 		},
 		{
-			name: "internal server error",
+			name: "internal server error response",
 			handler: func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
 			},

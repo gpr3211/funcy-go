@@ -81,8 +81,11 @@ func (f *Future[A]) Get() (A, error) {
 // result, err := future.Get()
 
 // GetWithTimeout waits for the Future to complete or times out after `timeout`.
-// computational error returned by error return, bool returns true if timeout is exceeded.
+// computational error returned by error return, bool returns true if timeout is exceeded or <=0.
 func (f *Future[A]) GetWithTimeout(timeout time.Duration) (A, error, bool) {
+	if timeout <= 0 {
+		return *new(A), nil, true // need to derefernce pointer since new returns one.
+	}
 	select {
 	case <-f.waitChan: // Future completed
 		f.mutex.RLock()
